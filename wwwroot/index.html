@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <title>HTML5 Server-Sent Events示例</title>
+</head>
+
+<body>
+    <input type="button" id="close" onclick="closeConnection()" value="关闭" />
+    <pre id="content">正在连接服务器...</pre>
+    <script>
+        var es = new EventSource("/sse");
+        es.onopen = function () {
+            document.getElementById("content").innerHTML = "连接成功";
+        }
+
+        es.onerror = function () {
+            document.getElementById("content").innerHTML = "连接失败";
+        }
+
+        es.onmessage = function (e) {
+            document.getElementById("content").innerHTML += "\n" + e.data;
+        }
+
+        function closeConnection() {
+            if (es.readyState != 0) { // 0 — connecting、1 — open、2 — closed
+                es.close()
+                document.getElementById("content").innerHTML = "连接断开";
+            }
+        }
+    </script>
+</body>
+
+</html>
